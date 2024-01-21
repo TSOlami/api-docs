@@ -21,11 +21,14 @@ def analyze_repo(repo_path):
                     with open(file_path, 'r', encoding='utf-8') as f:
                         num_lines += len(f.readlines())
 
-        # List the files in the repository
+        # List the files in the repository (excluding .git directory)
         file_list = []
         for root, dirs, files in os.walk(repo_path):
+            if '.git' in dirs:
+                dirs.remove('.git')  # Exclude .git directory
             for file in files:
-                file_list.append(os.path.relpath(os.path.join(root, file), repo_path))
+                if not file.startswith('.git'):
+                    file_list.append(os.path.relpath(os.path.join(root, file), repo_path))
 
         analysis_result = f"Repository Analysis:\n" \
                           f"Number of files: {num_files}\n" \
