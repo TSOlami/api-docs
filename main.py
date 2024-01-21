@@ -36,7 +36,7 @@ def main():
 		os.system(f"git clone {repo_url} {repo_path}")
 		print(f"Cloned repo into {repo_path}")
 
-		# Analyze the repo and generate documentation for the API endpoints
+		# Analyze the repo
 		analysis_result = analyze_codebase.analyze_repo(repo_path)
 		print(analysis_result)
 
