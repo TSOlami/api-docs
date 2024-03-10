@@ -1,6 +1,5 @@
 import os, stat
 import shutil
-import requests
 
 from utils import analyze_codebase
 
