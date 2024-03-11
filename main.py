@@ -1,7 +1,7 @@
 import os, stat
 import shutil
 
-from utils import analyze_codebase
+from utils import analyze_codebase, analyze_endpoint
 
 
 def remove_readonly(func, path, _):
@@ -35,9 +35,24 @@ def main():
 		os.system(f"git clone {repo_url} {repo_path}")
 		print(f"Cloned repo into {repo_path}")
 
-		# Analyze the repo
-		analysis_result = analyze_codebase.analyze_repo(repo_path)
-		print(analysis_result)
+		# Get examples of API endpoints from the user
+		endpoint_examples = analyze_endpoint.get_endpoint_examples()
+
+		# Ask if the user wants to analyze the entire repo or just the endpoints
+		analyze_entire_repo = input("Do you want to analyze the entire repository? (yes/no): ").strip().lower()
+		if analyze_entire_repo == "yes":
+			# Analyze the entire repository
+			repo_analysis = analyze_codebase.analyze_repo(repo_path)
+			print(repo_analysis)
+		else:
+			repo_analysis = "Repository analysis skipped."
+			print(repo_analysis)
+
+		# Find the API endpoints in the codebase
+		identified_endpoints = analyze_endpoint.find_endpoints(endpoint_examples, repo_path)
+		print(f"Identified endpoints:")
+		for file_path, endpoint in identified_endpoints:
+			print(f"File: {file_path}, Endpoint: {endpoint}")
 
 	except Exception as e:
 		print(f"Error: {e}")
