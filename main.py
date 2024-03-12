@@ -35,24 +35,27 @@ def main():
 		os.system(f"git clone {repo_url} {repo_path}")
 		print(f"Cloned repo into {repo_path}")
 
-		# Get examples of API endpoints from the user
-		endpoint_examples = analyze_endpoint.get_endpoint_examples()
+		# Analyze the entire repository
+		repo_analysis, uses_flask, uses_express = analyze_codebase.analyze_repo(repo_path)
 
-		# Ask if the user wants to analyze the entire repo or just the endpoints
-		analyze_entire_repo = input("Do you want to analyze the entire repository? (yes/no): ").strip().lower()
-		if analyze_entire_repo == "yes":
-			# Analyze the entire repository
-			repo_analysis = analyze_codebase.analyze_repo(repo_path)
-			print(repo_analysis)
+		# Print the analysis result
+		print(repo_analysis)
+		
+		# If at least one of the frameworks is used, proceed with endpoint identification
+		if uses_flask or uses_express:
+			print("Framework usage identified. Proceeding with endpoint identification.")
+
+			# Get examples of API endpoints from the user
+			endpoint_examples = analyze_endpoint.get_endpoint_examples()
+			
+			# Find all API endpoints in the codebase using the examples provided by the user
+			identified_endpoints = analyze_endpoint.find_endpoints(endpoint_examples, repo_path)
+			print(f"Identified endpoints:")
+			for file_path, endpoint in identified_endpoints:
+				print(f"File: {file_path}, Endpoint: {endpoint}")
 		else:
-			repo_analysis = "Repository analysis skipped."
-			print(repo_analysis)
-
-		# Find the API endpoints in the codebase
-		identified_endpoints = analyze_endpoint.find_endpoints(endpoint_examples, repo_path)
-		print(f"Identified endpoints:")
-		for file_path, endpoint in identified_endpoints:
-			print(f"File: {file_path}, Endpoint: {endpoint}")
+			print("Unable to identify the framework used. Cannot continue with documentation generation.")
+			return
 
 	except Exception as e:
 		print(f"Error: {e}")
