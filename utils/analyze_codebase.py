@@ -15,10 +15,6 @@ def analyze_repo(repo_path):
         uses_flask = False
         uses_express = False
 
-        # Regular expressions for detecting Flask and Express usage
-        flask_pattern = re.compile(r'Flask\s*\(\s*__name__\s*\)', re.MULTILINE)
-        express_pattern = re.compile(r'express\.Router\s*\(\s*\)', re.MULTILINE)
-
         # Walk through the repository and count files, directories, and lines of code
         for root, dirs, files in os.walk(repo_path):
             num_dirs += len(dirs)
@@ -28,15 +24,24 @@ def analyze_repo(repo_path):
                 # Check if the file is a Python or JavaScript file
                 if file.endswith(".py"):
                     with open(file_path, 'r', encoding='utf-8') as f:
+                        print(f"Analyzing file: {file_path}")
                         num_lines += sum(1 for line in f)
+                        f.seek(0)
                         file_content = f.read()
-                        if flask_pattern.search(file_content):
+                        print(file_content)
+                        flask_pattern_match = re.search(r'Flask\s*\(\s*__name__\s*\)', file_content)
+                        if flask_pattern_match:
                             uses_flask = True
-                elif file.endswith(".js"):
+
+                elif file.endswith((".js", ".ts")):
                     with open(file_path, 'r', encoding='utf-8') as f:
+                        print(f"Analyzing file: {file_path}")
                         num_lines += sum(1 for line in f)
+                        f.seek(0)
                         file_content = f.read()
-                        if express_pattern.search(file_content):
+                        print(file_content)
+                        express_pattern_match = re.search(r'express\.Router\s*\(\s*\)', file_content)
+                        if express_pattern_match:
                             uses_express = True
 
         # Get a list of all files in the repository

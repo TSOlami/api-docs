@@ -42,17 +42,24 @@ def main():
 		print(repo_analysis)
 		
 		# If at least one of the frameworks is used, proceed with endpoint identification
-		if uses_flask or uses_express:
-			print("Framework usage identified. Proceeding with endpoint identification.")
+		if uses_flask:
+			print("Flask framework usage identified. Proceeding with endpoint identification.")
 
 			# Get examples of API endpoints from the user
-			endpoint_examples = analyze_endpoint.get_endpoint_examples()
+			flask_endpoint_examples = analyze_endpoint.get_flask_endpoint_examples()
 			
 			# Find all API endpoints in the codebase using the examples provided by the user
-			identified_endpoints = analyze_endpoint.find_endpoints(endpoint_examples, repo_path)
-			print(f"Identified endpoints:")
-			for file_path, endpoint in identified_endpoints:
-				print(f"File: {file_path}, Endpoint: {endpoint}")
+			identified_flask_endpoints = analyze_endpoint.find_flask_endpoints(flask_endpoint_examples, repo_path)
+
+		if uses_express:
+			print("Express framework usage identified. Proceeding with endpoint identification.")
+
+			# Get examples of API endpoints from the user
+			express_endpoint_examples = analyze_endpoint.get_express_endpoint_examples()
+
+			# Find all API endpoints in the codebase using the examples provided by the user
+			identified_express_endpoints = analyze_endpoint.find_express_endpoints(express_endpoint_examples, repo_path)
+
 		else:
 			print("Unable to identify the framework used. Cannot continue with documentation generation.")
 			return
