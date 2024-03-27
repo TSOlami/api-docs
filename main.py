@@ -50,6 +50,7 @@ def main():
 			
 			# Find all API endpoints in the codebase using the examples provided by the user
 			identified_flask_endpoints = analyze_endpoint.find_flask_endpoints(flask_endpoint_examples, repo_path)
+			print("Found endpoints: ", identified_flask_endpoints)
 
 		if uses_express:
 			print("Express framework usage identified. Proceeding with endpoint identification.")
@@ -59,6 +60,7 @@ def main():
 
 			# Find all API endpoints in the codebase using the examples provided by the user
 			identified_express_endpoints = analyze_endpoint.find_express_endpoints(express_endpoint_examples, repo_path)
+			print("Found endpoints: ", identified_express_endpoints)
 
 		else:
 			print("Unable to identify the framework used. Cannot continue with documentation generation.")
