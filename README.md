@@ -1,2 +1,2 @@
-# API_DOCS_V1
+# api_docs_v1
 A command-line tool for documenting api
